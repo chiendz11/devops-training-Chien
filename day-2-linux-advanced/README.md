@@ -284,7 +284,9 @@ Permission denied
 
 #### 6. Screenshot kết quả
 
-![Permission lab](screenshots/permission-lab.png)
+Ảnh dưới đây ghi lại kết quả kiểm tra setgid, group `devops` và ACL của user `labreader`:
+
+![Kết quả Part C - Permission lab](screenshots/permission-lab.png)
 
 #### 7. Cleanup
 
@@ -296,11 +298,198 @@ sudo userdel -r labreader
 sudo groupdel devops
 ```
 
+### Part D - Monitoring script
+
+`monitor.sh` thực hiện các chức năng:
+
+- Mỗi 10 giây hiển thị CPU%, MEM% và top 3 process dùng CPU cao nhất.
+- Nếu CPU vượt `80%` trong 3 sample liên tiếp, ghi cảnh báo vào `~/monitor.log`.
+- Bắt `SIGINT`/`SIGTERM` để thoát graceful.
+- Có thể chạy trực tiếp hoặc qua `monitor.service`.
+
+#### 1. Chạy monitor thủ công
+
+```bash
+chmod +x monitor.sh
+./monitor.sh
+```
+
+Nhấn `Ctrl+C` để dừng. Kết quả mong đợi:
+
+```text
+Received stop signal. Monitor is exiting gracefully...
+Monitor stopped.
+```
+
+#### 2. Test nhanh warning log
+
+Để không phải chờ CPU thật vượt `80%`, override interval và threshold khi test:
+
+```bash
+rm -f /tmp/monitor-test.log
+
+INTERVAL=1 \
+CPU_THRESHOLD=0 \
+LOG_FILE=/tmp/monitor-test.log \
+./monitor.sh
+```
+
+Sau ít nhất 3 sample, nhấn `Ctrl+C` rồi kiểm tra:
+
+```bash
+cat /tmp/monitor-test.log
+```
+
+Kết quả mong đợi có dòng:
+
+```text
+WARNING: CPU usage exceeded 0% for 3 consecutive samples
+```
+
+Khi chạy bình thường hoặc qua systemd, threshold vẫn là `80%` và log được ghi vào:
+
+```text
+~/monitor.log
+```
+
+#### 3. Chuẩn bị script trong /opt/monitor
+
+```bash
+sudo mkdir -p /opt/monitor
+sudo rm -f /opt/monitor/monitor.sh
+
+# Symlink tới script trong repository
+sudo ln -s "$(realpath monitor.sh)" /opt/monitor/monitor.sh
+sudo chmod +x monitor.sh
+
+# Kiểm tra symlink
+find /opt/monitor -type l -name '*monitor*' -ls
+```
+
+#### 4. Cập nhật user và log path trong unit file
+
+```bash
+# Thay user và đường dẫn HOME theo máy hiện tại
+sed -i "s/^User=.*/User=$USER/" monitor.service
+sed -i "s|^Environment=LOG_FILE=.*|Environment=LOG_FILE=$HOME/monitor.log|" \
+  monitor.service
+
+# Kiểm tra lại cấu hình
+grep -E '^(User|Environment|ExecStart)=' monitor.service
+```
+
+Kết quả phải có:
+
+```text
+User=<user hiện tại>
+Environment=INTERVAL=10
+Environment=CPU_THRESHOLD=80
+Environment=LOG_FILE=<home hiện tại>/monitor.log
+ExecStart=/opt/monitor/monitor.sh
+```
+
+#### 5. Cài monitor.service bằng symlink
+
+```bash
+sudo rm -f /etc/systemd/system/monitor.service
+
+sudo ln -s "$(realpath monitor.service)" \
+  /etc/systemd/system/monitor.service
+
+# Kiểm tra symlink
+find /etc/systemd/system \
+  -type l \
+  -name '*monitor*' \
+  -ls
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now monitor
+```
+
+#### 6. Verify monitor service
+
+```bash
+systemctl is-enabled monitor
+systemctl is-active monitor
+systemctl status monitor --no-pager
+```
+
+Kết quả mong đợi:
+
+- `systemctl is-enabled monitor` trả về `enabled`.
+- `systemctl is-active monitor` trả về `active`.
+- Status hiển thị `monitor.sh` đang chạy dưới đúng user.
+
+Xem output mỗi 10 giây qua journal:
+
+```bash
+journalctl -u monitor -f
+```
+
+Nhấn `Ctrl+C` để thoát chế độ theo dõi log.
+
+Xem warning log:
+
+```bash
+tail -n 20 "$HOME/monitor.log"
+```
+
+#### 7. Kiểm tra graceful stop qua systemd
+
+```bash
+sudo systemctl stop monitor
+journalctl -u monitor -n 20 --no-pager
+```
+
+Log mong đợi:
+
+```text
+Received stop signal. Monitor is exiting gracefully...
+Monitor stopped.
+```
+
+Khởi động lại service:
+
+```bash
+sudo systemctl start monitor
+```
+
+#### 8. Screenshot cần nộp
+
+Chụp các output sau và lưu trong `./screenshots/`:
+
+```bash
+systemctl status monitor --no-pager
+journalctl -u monitor -n 30 --no-pager
+tail -n 20 "$HOME/monitor.log"
+```
+
+Tên file gợi ý:
+
+```text
+screenshots/monitor-service-status.png
+screenshots/monitor-journal.png
+screenshots/monitor-warning.png
+```
+
+#### 9. Cleanup
+
+Chỉ chạy khi không cần giữ monitor service:
+
+```bash
+sudo systemctl disable --now monitor
+sudo rm -f /etc/systemd/system/monitor.service
+sudo rm -f /opt/monitor/monitor.sh
+sudo rmdir /opt/monitor 2> /dev/null || true
+sudo systemctl daemon-reload
+```
+
 ## 3. Kết quả
 
 - Part A: script hiển thị PID/PPID, gửi `SIGTERM` và thu exit code.
 - Part B: `webapp.service` được enable, chạy tại port `8080` và tự restart sau khi process bị kill.
 - Part C: thư mục shared có setgid, file inherit group `devops` và ACL cho phép `labreader` chỉ đọc.
+- Part D: monitor in CPU/MEM/top 3 process mỗi 10 giây, ghi warning sau 3 sample CPU cao và chạy được qua systemd.
 - Screenshot/log output được lưu trong `./screenshots/`.
 - Link demo: Không có.
 
