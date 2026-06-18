@@ -186,10 +186,121 @@ sudo systemctl daemon-reload
 sudo rm -rf /opt/webapp
 ```
 
+### Part C - Permission lab
+
+Steps reproduce đầy đủ được ghi trong [`permissions-lab.md`](permissions-lab.md).
+
+#### 1. Tạo group và thư mục shared
+
+```bash
+# Tạo group nếu chưa tồn tại
+getent group devops > /dev/null || sudo groupadd devops
+
+# Tạo thư mục dùng chung
+sudo mkdir -p /tmp/shared-lab
+sudo chown "$USER":devops /tmp/shared-lab
+
+# Bật setgid để file mới inherit group devops
+sudo chmod 2770 /tmp/shared-lab
+
+# Kiểm tra owner, group và setgid bit
+ls -ld /tmp/shared-lab
+```
+
+Kết quả mong đợi:
+
+```text
+drwxrws--- ... <user hiện tại> devops ... /tmp/shared-lab
+```
+
+#### 2. Kiểm tra file mới inherit group devops
+
+```bash
+touch /tmp/shared-lab/inherit-test.txt
+stat -c 'owner=%U group=%G' /tmp/shared-lab/inherit-test.txt
+```
+
+Kết quả mong đợi:
+
+```text
+group=devops
+```
+
+#### 3. Tạo secret.txt chỉ owner đọc và ghi
+
+```bash
+echo "This is secret data" > /tmp/shared-lab/secret.txt
+chmod 600 /tmp/shared-lab/secret.txt
+ls -l /tmp/shared-lab/secret.txt
+```
+
+Kết quả mong đợi trước khi cấp ACL:
+
+```text
+-rw------- ... secret.txt
+```
+
+#### 4. Tạo user và cấp ACL chỉ đọc
+
+```bash
+# Cài ACL tool nếu máy chưa có
+sudo apt-get update
+sudo apt-get install -y acl
+
+# Tạo user kiểm thử nếu chưa tồn tại
+id labreader > /dev/null 2>&1 || sudo useradd -m labreader
+
+# Cho phép user đi xuyên qua thư mục
+sudo setfacl -m u:labreader:--x /tmp/shared-lab
+
+# Cho phép user chỉ đọc secret.txt
+sudo setfacl -m u:labreader:r-- /tmp/shared-lab/secret.txt
+
+# Kiểm tra ACL
+getfacl /tmp/shared-lab
+getfacl /tmp/shared-lab/secret.txt
+```
+
+#### 5. Verify quyền đọc và ghi
+
+Kiểm tra `labreader` đọc được:
+
+```bash
+sudo -u labreader cat /tmp/shared-lab/secret.txt
+```
+
+Kiểm tra `labreader` không ghi được:
+
+```bash
+sudo -u labreader sh -c \
+  'echo "unauthorized change" >> /tmp/shared-lab/secret.txt'
+```
+
+Kết quả ghi mong đợi:
+
+```text
+Permission denied
+```
+
+#### 6. Screenshot kết quả
+
+![Permission lab](screenshots/permission-lab.png)
+
+#### 7. Cleanup
+
+Chỉ xóa user/group nếu chúng được tạo riêng cho bài lab:
+
+```bash
+sudo rm -rf /tmp/shared-lab
+sudo userdel -r labreader
+sudo groupdel devops
+```
+
 ## 3. Kết quả
 
 - Part A: script hiển thị PID/PPID, gửi `SIGTERM` và thu exit code.
 - Part B: `webapp.service` được enable, chạy tại port `8080` và tự restart sau khi process bị kill.
+- Part C: thư mục shared có setgid, file inherit group `devops` và ACL cho phép `labreader` chỉ đọc.
 - Screenshot/log output được lưu trong `./screenshots/`.
 - Link demo: Không có.
 
