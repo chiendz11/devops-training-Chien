@@ -13,7 +13,9 @@ Thực hành các thao tác Git nâng cao gồm rebase, xử lý conflict, cherr
 Repository sử dụng:
 
 - Bài nộp: [chiendz11/devops-training-Chien](https://github.com/chiendz11/devops-training-Chien)
-- Repository thực hành: [chiendz11/git-lab](https://github.com/chiendz11/git-lab)
+- Repository thực hành đã hoàn thành của intern: [chiendz11/git-lab](https://github.com/chiendz11/git-lab)
+
+Repo `chiendz11/git-lab` đã chứa toàn bộ branch và commit sau khi hoàn thành task, vì vậy mentor không dùng repo này để chạy lại từ đầu. Khi reproduce, mentor sẽ tự tạo một repo GitHub mới và clone repo đó về máy.
 
 ## 2. Cách chạy
 
@@ -24,7 +26,7 @@ Máy mentor cần có:
 - Git
 - GitHub CLI `gh`
 - Python 3 và pip
-- Quyền clone repository `git-lab` nếu repository đang để private
+- Một tài khoản GitHub đã đăng nhập bằng `gh`
 
 Kiểm tra:
 
@@ -36,27 +38,41 @@ python3 --version
 python3 -m pip --version
 ```
 
-### 2.2. Clone hai repository
+### 2.2. Chuẩn bị hai repository
 
-Hai repository được đặt song song trong cùng thư mục cha. Repo `git-lab` dùng để chạy lệnh Git; kết quả và tài liệu được lưu trong `devops-training-Chien/phase-1/week-1/day-3-git`.
+Hai repository được đặt song song trong cùng thư mục cha:
+
+- `devops-training-Chien`: clone branch bài nộp để đọc hướng dẫn và lưu log reproduce.
+- `git-lab`: repo mới do mentor tự tạo để thực hành từ trạng thái sạch.
 
 ```bash
 mkdir -p git-day3-review
 cd git-day3-review
 
 REVIEW_ROOT=$(pwd)
+GH_USER=$(gh api user --jq '.login')
+LAB_REPO="git-lab-reproduce"
 
+# Clone repository bài nộp.
 gh repo clone chiendz11/devops-training-Chien \
   "$REVIEW_ROOT/devops-training-Chien" \
   -- --branch phase-1/week-1/day-3-git --single-branch
 
-gh repo clone chiendz11/git-lab \
-  "$REVIEW_ROOT/git-lab" \
-  -- --branch main --single-branch
+# Tạo repo lab mới trên tài khoản GitHub của mentor.
+# --add-readme tạo initial commit và branch main.
+gh repo create "$GH_USER/$LAB_REPO" \
+  --private \
+  --add-readme
+
+# Clone repo lab mới vào cùng thư mục cha.
+gh repo clone "$GH_USER/$LAB_REPO" \
+  "$REVIEW_ROOT/git-lab"
 
 export DAY3_DIR="$REVIEW_ROOT/devops-training-Chien/phase-1/week-1/day-3-git"
 export GIT_LAB_DIR="$REVIEW_ROOT/git-lab"
 ```
+
+Nếu tài khoản đã có repo `git-lab-reproduce`, đổi `LAB_REPO` sang tên khác trước khi chạy `gh repo create`.
 
 Kiểm tra:
 
@@ -66,6 +82,11 @@ git branch --show-current
 
 cd "$DAY3_DIR"
 ls -la
+
+cd "$GIT_LAB_DIR"
+git remote -v
+git branch --show-current
+git log --oneline --decorate
 ```
 
 Branch của repo bài nộp phải là:
@@ -74,22 +95,32 @@ Branch của repo bài nộp phải là:
 phase-1/week-1/day-3-git
 ```
 
-### 2.3. Chuẩn bị repo `git-lab`
+Repo lab mới phải có branch `main`, một initial commit và remote trỏ tới repo của mentor:
 
-Các bước dưới đây làm thay đổi Git history. Chỉ nên chạy trên bản clone dùng để reproduce.
+```text
+main
+<sha> Initial commit
+origin  git@github.com:<mentor>/git-lab-reproduce.git
+```
+
+### 2.3. Kiểm tra repo lab trước khi thực hành
+
+Repo này mới được tạo nên không cần reset lịch sử, xóa remote hoặc checkout commit cũ.
 
 ```bash
 cd "$GIT_LAB_DIR"
 
-INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
-
-# Tránh vô tình push lịch sử reproduce lên GitHub.
-git remote remove origin
-git reset --hard "$INITIAL_COMMIT"
-
 git status
+git branch --show-current
 git log --oneline --graph --all --decorate
 ```
+
+Kết quả mong đợi:
+
+- Working tree sạch.
+- Branch hiện tại là `main`.
+- Repo chỉ có initial commit tạo bởi `--add-readme`.
+- Remote `origin` vẫn được giữ để mentor có thể push các branch reproduce nếu muốn.
 
 ### 2.4. Part A — Rebase, conflict, cherry-pick và squash
 
@@ -163,7 +194,7 @@ nano app.conf
 Ví dụ nội dung sau khi resolve:
 
 ```text
-App version: B 
+App version: B
 ```
 
 Tiếp tục cho tới khi rebase hoàn tất:
