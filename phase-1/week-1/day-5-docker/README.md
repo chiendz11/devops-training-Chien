@@ -294,21 +294,6 @@ Giải thích:
 - Dòng `Base image node:20-alpine` có cùng số CVE với target. App của em chỉ copy một file JavaScript và không cài npm package, nên kết quả cho thấy phần lớn vấn đề đến từ base image/runtime thay vì dependency của application.
 - Scout đề xuất `node:24-alpine` và ước tính còn `0 Critical`, `1 High`, `5 Medium`, `2 Low`, tức giảm `1 Critical`, `18 High`, `3 Medium`, `2 Low`.
 
-Không nên đổi thẳng từ Node.js 20 lên Node.js 24 chỉ vì số CVE thấp hơn. Đây là major-version upgrade nên vẫn phải kiểm tra compatibility, chạy test và xác nhận Node.js 24 phù hợp policy của dự án. Với ứng dụng thật, em sẽ ưu tiên:
-
-1. Rebuild thường xuyên từ digest mới nhất của base image đang hỗ trợ.
-2. Xem chi tiết bằng `docker scout cves`.
-3. Kiểm tra bản vá hoặc base image recommendation.
-4. Upgrade major version trong branch riêng và chạy regression test.
-
-Scout cũng cảnh báo base image được auto-detect và khuyên build với max-mode provenance để kết quả chính xác hơn. Có thể build lại bằng:
-
-```bash
-docker buildx build \
-  --provenance=mode=max \
-  --load \
-  -t demo-app:1.0.0 .
-```
 
 Lưu ý: vulnerability database thay đổi theo thời gian nên số CVE mentor nhận được có thể khác kết quả lúc em làm bài.
 
@@ -446,9 +431,6 @@ Kết quả chính:
 - [Docker Scout installation](https://docs.docker.com/scout/install/)
 - [Docker Scout image analysis](https://docs.docker.com/scout/explore/analysis/)
 - [Trivy container image scanning](https://trivy.dev/docs/latest/guide/target/container_image/)
-- [Node.js official Docker image](https://hub.docker.com/_/node)
-- [Google Distroless images](https://github.com/GoogleContainerTools/distroless)
-- [PostgreSQL official Docker image](https://hub.docker.com/_/postgres)
 
 ## 6. Self-check
 
