@@ -1,0 +1,558 @@
+    ...Storing image for indexing
+    ✓ Image stored for indexing
+    ...Indexing
+    ✓ Indexed 320 packages
+    ✓ Provenance obtained from attestation
+    ✗ Detected 23 vulnerable packages with a total of 78 vulnerabilities
+
+
+## Overview
+
+                   │                   Analyzed Image                   
+───────────────────┼────────────────────────────────────────────────────
+ Target            │  local://demo-app:node20-slim                      
+   digest          │  f1825b652e2f                                      
+   platform        │ linux/amd64                                        
+   provenance      │ git@github.com:chiendz11/devops-training-Chien.git 
+                   │  https://github.com/chiendz11/devops-training-Chien/blob/610c831e271b7faf1b76f27ca102c3791702b91a          
+   vulnerabilities │    1C    26H    15M    34L     2?                  
+   size            │ 71 MB                                              
+   packages        │ 320                                                
+
+
+## Packages and Vulnerabilities
+
+   1C     2H     2M     3L  perl 5.36.0-7+deb12u3
+pkg:deb/debian/perl@5.36.0-7%2Bdeb12u3?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ CRITICAL CVE-2026-12087
+      https://scout.docker.com/v/CVE-2026-12087?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ HIGH CVE-2026-48959
+      https://scout.docker.com/v/CVE-2026-48959?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ HIGH CVE-2026-48962
+      https://scout.docker.com/v/CVE-2026-48962?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ MEDIUM CVE-2026-7010
+      https://scout.docker.com/v/CVE-2026-7010?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ MEDIUM CVE-2025-15649
+      https://scout.docker.com/v/CVE-2025-15649?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2026-48961
+      https://scout.docker.com/v/CVE-2026-48961?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2023-31486
+      https://scout.docker.com/v/CVE-2023-31486?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2011-4116
+      https://scout.docker.com/v/CVE-2011-4116?s=debian&n=perl&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     8H     3M     2L  gnutls28 3.7.9-2+deb12u6
+pkg:deb/debian/gnutls28@3.7.9-2%2Bdeb12u6?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ HIGH CVE-2026-5260
+      https://scout.docker.com/v/CVE-2026-5260?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-42013
+      https://scout.docker.com/v/CVE-2026-42013?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-42009
+      https://scout.docker.com/v/CVE-2026-42009?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-33846
+      https://scout.docker.com/v/CVE-2026-33846?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-33845
+      https://scout.docker.com/v/CVE-2026-33845?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-42011
+      https://scout.docker.com/v/CVE-2026-42011?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-42012
+      https://scout.docker.com/v/CVE-2026-42012?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ HIGH CVE-2026-42010
+      https://scout.docker.com/v/CVE-2026-42010?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ MEDIUM CVE-2026-42014
+      https://scout.docker.com/v/CVE-2026-42014?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ MEDIUM CVE-2026-3833
+      https://scout.docker.com/v/CVE-2026-3833?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ MEDIUM CVE-2026-42015
+      https://scout.docker.com/v/CVE-2026-42015?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ LOW CVE-2026-5419
+      https://scout.docker.com/v/CVE-2026-5419?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3C3.7.9-2%2Bdeb12u7
+      Affected range : <3.7.9-2+deb12u7 
+      Fixed version  : 3.7.9-2+deb12u7  
+    
+    ✗ LOW CVE-2011-3389
+      https://scout.docker.com/v/CVE-2011-3389?s=debian&n=gnutls28&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     6H     1M     0L  tar 6.2.1
+pkg:npm/tar@6.2.1
+
+    ✗ HIGH CVE-2026-23950 [Improper Handling of Unicode Encoding]
+      https://scout.docker.com/v/CVE-2026-23950?s=github&n=tar&t=npm&vr=%3C%3D7.5.3
+      Affected range : <=7.5.3                                      
+      Fixed version  : 7.5.4                                        
+      CVSS Score     : 8.8                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:H/A:L 
+    
+    ✗ HIGH CVE-2026-31802 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-31802?s=github&n=tar&t=npm&vr=%3C%3D7.5.10
+      Affected range : <=7.5.10                                                        
+      Fixed version  : 7.5.11                                                          
+      CVSS Score     : 8.2                                                             
+      CVSS Vector    : CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:N/SC:N/SI:H/SA:N 
+    
+    ✗ HIGH CVE-2026-29786 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-29786?s=github&n=tar&t=npm&vr=%3C%3D7.5.9
+      Affected range : <=7.5.9                                                         
+      Fixed version  : 7.5.10                                                          
+      CVSS Score     : 8.2                                                             
+      CVSS Vector    : CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:N/VI:H/VA:L/SC:N/SI:H/SA:L 
+    
+    ✗ HIGH CVE-2026-24842 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-24842?s=github&n=tar&t=npm&vr=%3C7.5.7
+      Affected range : <7.5.7                                       
+      Fixed version  : 7.5.7                                        
+      CVSS Score     : 8.2                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:N 
+    
+    ✗ HIGH CVE-2026-23745 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-23745?s=github&n=tar&t=npm&vr=%3C%3D7.5.2
+      Affected range : <=7.5.2                                                         
+      Fixed version  : 7.5.3                                                           
+      CVSS Score     : 8.2                                                             
+      CVSS Vector    : CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:H/VI:L/VA:N/SC:H/SI:L/SA:N 
+    
+    ✗ HIGH CVE-2026-26960 [Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')]
+      https://scout.docker.com/v/CVE-2026-26960?s=github&n=tar&t=npm&vr=%3C7.5.8
+      Affected range : <7.5.8                                       
+      Fixed version  : 7.5.8                                        
+      CVSS Score     : 7.1                                          
+      CVSS Vector    : CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N 
+    
+    ✗ MEDIUM CVE-2026-53655 [Interpretation Conflict]
+      https://scout.docker.com/v/CVE-2026-53655?s=github&n=tar&t=npm&vr=%3C%3D7.5.15
+      Affected range : <=7.5.15                                                        
+      Fixed version  : 7.5.16                                                          
+      CVSS Score     : 6.9                                                             
+      CVSS Vector    : CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:N/SC:N/SI:N/SA:N 
+    
+
+   0C     4H     0M     9L  glibc 2.36-9+deb12u13
+pkg:deb/debian/glibc@2.36-9%2Bdeb12u13?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ HIGH CVE-2026-0861
+      https://scout.docker.com/v/CVE-2026-0861?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ HIGH CVE-2026-4046
+      https://scout.docker.com/v/CVE-2026-4046?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ HIGH CVE-2026-0915
+      https://scout.docker.com/v/CVE-2026-0915?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ HIGH CVE-2025-15281
+      https://scout.docker.com/v/CVE-2025-15281?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ LOW CVE-2026-4438
+      https://scout.docker.com/v/CVE-2026-4438?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ LOW CVE-2026-4437
+      https://scout.docker.com/v/CVE-2026-4437?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3C2.36-9%2Bdeb12u14
+      Affected range : <2.36-9+deb12u14 
+      Fixed version  : 2.36-9+deb12u14  
+    
+    ✗ LOW CVE-2019-9192
+      https://scout.docker.com/v/CVE-2019-9192?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2019-1010025
+      https://scout.docker.com/v/CVE-2019-1010025?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2019-1010024
+      https://scout.docker.com/v/CVE-2019-1010024?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2019-1010023
+      https://scout.docker.com/v/CVE-2019-1010023?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2019-1010022
+      https://scout.docker.com/v/CVE-2019-1010022?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2018-20796
+      https://scout.docker.com/v/CVE-2018-20796?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2010-4756
+      https://scout.docker.com/v/CVE-2010-4756?s=debian&n=glibc&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     3H     0M     0L  minimatch 9.0.5
+pkg:npm/minimatch@9.0.5
+
+    ✗ HIGH CVE-2026-26996 [Inefficient Regular Expression Complexity]
+      https://scout.docker.com/v/CVE-2026-26996?s=github&n=minimatch&t=npm&vr=%3E%3D9.0.0%2C%3C9.0.6
+      Affected range : >=9.0.0                                                         
+                     : <9.0.6                                                          
+      Fixed version  : 10.2.1                                                          
+      CVSS Score     : 8.7                                                             
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N 
+    
+    ✗ HIGH CVE-2026-27904 [Inefficient Regular Expression Complexity]
+      https://scout.docker.com/v/CVE-2026-27904?s=github&n=minimatch&t=npm&vr=%3E%3D9.0.0%2C%3C9.0.7
+      Affected range : >=9.0.0                                      
+                     : <9.0.7                                       
+      Fixed version  : 9.0.7                                        
+      CVSS Score     : 7.5                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H 
+    
+    ✗ HIGH CVE-2026-27903 [Inefficient Algorithmic Complexity]
+      https://scout.docker.com/v/CVE-2026-27903?s=github&n=minimatch&t=npm&vr=%3E%3D9.0.0%2C%3C9.0.7
+      Affected range : >=9.0.0                                      
+                     : <9.0.7                                       
+      Fixed version  : 9.0.7                                        
+      CVSS Score     : 7.5                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H 
+    
+
+   0C     1H     0M     1L  dpkg 1.21.22
+pkg:deb/debian/dpkg@1.21.22?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ HIGH CVE-2025-6297
+      https://scout.docker.com/v/CVE-2025-6297?s=debian&n=dpkg&ns=debian&t=deb&osn=debian&osv=12&vr=%3C1.21.23
+      Affected range : <1.21.23 
+      Fixed version  : 1.21.23  
+    
+    ✗ LOW CVE-2026-2219
+      https://scout.docker.com/v/CVE-2026-2219?s=debian&n=dpkg&ns=debian&t=deb&osn=debian&osv=12&vr=%3C1.21.23
+      Affected range : <1.21.23 
+      Fixed version  : 1.21.23  
+    
+
+   0C     1H     0M     0L  glob 10.4.2
+pkg:npm/glob@10.4.2
+
+    ✗ HIGH CVE-2025-64756 [Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')]
+      https://scout.docker.com/v/CVE-2025-64756?s=github&n=glob&t=npm&vr=%3E%3D10.2.0%2C%3C10.5.0
+      Affected range : >=10.2.0                                     
+                     : <10.5.0                                      
+      Fixed version  : 11.1.0                                       
+      CVSS Score     : 7.5                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H 
+    
+
+   0C     1H     0M     0L  cross-spawn 7.0.3
+pkg:npm/cross-spawn@7.0.3
+
+    ✗ HIGH CVE-2024-21538 [Inefficient Regular Expression Complexity]
+      https://scout.docker.com/v/CVE-2024-21538?s=github&n=cross-spawn&t=npm&vr=%3E%3D7.0.0%2C%3C7.0.5
+      Affected range : >=7.0.0                                                             
+                     : <7.0.5                                                              
+      Fixed version  : 7.0.5                                                               
+      CVSS Score     : 7.7                                                                 
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:P 
+    
+
+   0C     0H     4M     4L  systemd 252.39-1~deb12u1
+pkg:deb/debian/systemd@252.39-1~deb12u1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ MEDIUM CVE-2026-4105
+      https://scout.docker.com/v/CVE-2026-4105?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3C252.39-1%7Edeb12u2
+      Affected range : <252.39-1~deb12u2 
+      Fixed version  : 252.39-1~deb12u2  
+    
+    ✗ MEDIUM CVE-2026-40226
+      https://scout.docker.com/v/CVE-2026-40226?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3C252.39-1%7Edeb12u2
+      Affected range : <252.39-1~deb12u2 
+      Fixed version  : 252.39-1~deb12u2  
+    
+    ✗ MEDIUM CVE-2026-40225
+      https://scout.docker.com/v/CVE-2026-40225?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3C252.39-1%7Edeb12u2
+      Affected range : <252.39-1~deb12u2 
+      Fixed version  : 252.39-1~deb12u2  
+    
+    ✗ MEDIUM CVE-2026-29111
+      https://scout.docker.com/v/CVE-2026-29111?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3C252.39-1%7Edeb12u2
+      Affected range : <252.39-1~deb12u2 
+      Fixed version  : 252.39-1~deb12u2  
+    
+    ✗ LOW CVE-2023-31439
+      https://scout.docker.com/v/CVE-2023-31439?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2023-31438
+      https://scout.docker.com/v/CVE-2023-31438?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2023-31437
+      https://scout.docker.com/v/CVE-2023-31437?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2013-4392
+      https://scout.docker.com/v/CVE-2013-4392?s=debian&n=systemd&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     1M     1L  brace-expansion 2.0.1
+pkg:npm/brace-expansion@2.0.1
+
+    ✗ MEDIUM CVE-2026-33750 [Uncontrolled Resource Consumption]
+      https://scout.docker.com/v/CVE-2026-33750?s=github&n=brace-expansion&t=npm&vr=%3E%3D2.0.0%2C%3C2.0.3
+      Affected range : >=2.0.0                                      
+                     : <2.0.3                                       
+      Fixed version  : 5.0.5                                        
+      CVSS Score     : 6.5                                          
+      CVSS Vector    : CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H 
+    
+    ✗ LOW CVE-2025-5889 [Uncontrolled Resource Consumption]
+      https://scout.docker.com/v/CVE-2025-5889?s=github&n=brace-expansion&t=npm&vr=%3E%3D2.0.0%2C%3C%3D2.0.1
+      Affected range : >=2.0.0                                                             
+                     : <=2.0.1                                                             
+      Fixed version  : 2.0.2                                                               
+      CVSS Score     : 1.3                                                                 
+      CVSS Vector    : CVSS:4.0/AV:N/AC:H/AT:N/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P 
+    
+
+   0C     0H     1M     1L  tar 1.34+dfsg-1.2+deb12u1
+pkg:deb/debian/tar@1.34%2Bdfsg-1.2%2Bdeb12u1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ MEDIUM CVE-2025-45582
+      https://scout.docker.com/v/CVE-2025-45582?s=debian&n=tar&ns=debian&t=deb&osn=debian&osv=12&vr=%3E%3D1.34%2Bdfsg-1.2%2Bdeb12u1
+      Affected range : >=1.34+dfsg-1.2+deb12u1 
+      Fixed version  : not fixed               
+    
+    ✗ LOW CVE-2005-2541
+      https://scout.docker.com/v/CVE-2005-2541?s=debian&n=tar&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     1M     0L  ip-address 9.0.5
+pkg:npm/ip-address@9.0.5
+
+    ✗ MEDIUM CVE-2026-42338 [Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')]
+      https://scout.docker.com/v/CVE-2026-42338?s=github&n=ip-address&t=npm&vr=%3C%3D10.1.0
+      Affected range : <=10.1.0                                                        
+      Fixed version  : 10.1.1                                                          
+      CVSS Score     : 5.3                                                             
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N 
+    
+
+   0C     0H     1M     0L  libcap2 1:2.66-4+deb12u2+b2
+pkg:deb/debian/libcap2@1%3A2.66-4%2Bdeb12u2%2Bb2?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ MEDIUM CVE-2026-4878
+      https://scout.docker.com/v/CVE-2026-4878?s=debian&n=libcap2&ns=debian&t=deb&osn=debian&osv=12&vr=%3C1%3A2.66-4%2Bdeb12u3
+      Affected range : <1:2.66-4+deb12u3 
+      Fixed version  : 1:2.66-4+deb12u3  
+    
+
+   0C     0H     1M     0L  pam 1.5.2-6+deb12u2
+pkg:deb/debian/pam@1.5.2-6%2Bdeb12u2?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ MEDIUM CVE-2026-54411
+      https://scout.docker.com/v/CVE-2026-54411?s=debian&n=pam&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     3L  libgcrypt20 1.10.1-3
+pkg:deb/debian/libgcrypt20@1.10.1-3?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2026-41989
+      https://scout.docker.com/v/CVE-2026-41989?s=debian&n=libgcrypt20&ns=debian&t=deb&osn=debian&osv=12&vr=%3C1.10.1-3%2Bdeb12u1
+      Affected range : <1.10.1-3+deb12u1 
+      Fixed version  : 1.10.1-3+deb12u1  
+    
+    ✗ LOW CVE-2024-2236
+      https://scout.docker.com/v/CVE-2024-2236?s=debian&n=libgcrypt20&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2018-6829
+      https://scout.docker.com/v/CVE-2018-6829?s=debian&n=libgcrypt20&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     2L     2?  util-linux 2.38.1-5+deb12u3
+pkg:deb/debian/util-linux@2.38.1-5%2Bdeb12u3?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2025-14104
+      https://scout.docker.com/v/CVE-2025-14104?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2022-0563
+      https://scout.docker.com/v/CVE-2022-0563?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ UNSPECIFIED CVE-2026-53615
+      https://scout.docker.com/v/CVE-2026-53615?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ UNSPECIFIED CVE-2026-53613
+      https://scout.docker.com/v/CVE-2026-53613?s=debian&n=util-linux&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     2L  coreutils 9.1-1
+pkg:deb/debian/coreutils@9.1-1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2025-5278
+      https://scout.docker.com/v/CVE-2025-5278?s=debian&n=coreutils&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+    ✗ LOW CVE-2017-18018
+      https://scout.docker.com/v/CVE-2017-18018?s=debian&n=coreutils&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  gnupg2 2.2.40-1.1+deb12u2
+pkg:deb/debian/gnupg2@2.2.40-1.1%2Bdeb12u2?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2022-3219
+      https://scout.docker.com/v/CVE-2022-3219?s=debian&n=gnupg2&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  shadow 1:4.13+dfsg1-1+deb12u2
+pkg:deb/debian/shadow@1%3A4.13%2Bdfsg1-1%2Bdeb12u2?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2007-5686
+      https://scout.docker.com/v/CVE-2007-5686?s=debian&n=shadow&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  apt 2.6.1
+pkg:deb/debian/apt@2.6.1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2011-3374
+      https://scout.docker.com/v/CVE-2011-3374?s=debian&n=apt&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  diff 5.2.0
+pkg:npm/diff@5.2.0
+
+    ✗ LOW CVE-2026-24001 [Inefficient Regular Expression Complexity]
+      https://scout.docker.com/v/CVE-2026-24001?s=github&n=diff&t=npm&vr=%3E%3D5.0.0%2C%3C5.2.2
+      Affected range : >=5.0.0                                                             
+                     : <5.2.2                                                              
+      Fixed version  : 5.2.2                                                               
+      CVSS Score     : 2.7                                                                 
+      CVSS Vector    : CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U 
+    
+
+   0C     0H     0M     1L  gcc-12 12.2.0-14+deb12u1
+pkg:deb/debian/gcc-12@12.2.0-14%2Bdeb12u1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2022-27943
+      https://scout.docker.com/v/CVE-2022-27943?s=debian&n=gcc-12&ns=debian&t=deb&osn=debian&osv=12&vr=%3E0
+      Affected range : >0        
+      Fixed version  : not fixed 
+    
+
+   0C     0H     0M     1L  sed 4.9-1
+pkg:deb/debian/sed@4.9-1?os_distro=bookworm&os_name=debian&os_version=12
+
+    ✗ LOW CVE-2026-5958
+      https://scout.docker.com/v/CVE-2026-5958?s=debian&n=sed&ns=debian&t=deb&osn=debian&osv=12&vr=%3C4.9-1%2Bdeb12u1
+      Affected range : <4.9-1+deb12u1 
+      Fixed version  : 4.9-1+deb12u1  
+    
+
+
+78 vulnerabilities found in 23 packages
+  CRITICAL     1  
+  HIGH         26 
+  MEDIUM       15 
+  LOW          34 
+  UNSPECIFIED  2  
+
+
+What's next:
+    View base image update recommendations → docker scout recommendations local://demo-app:node20-slim
+

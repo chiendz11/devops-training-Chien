@@ -225,77 +225,190 @@ Image trên Docker Hub:
 
 ### 2.6. Part E — Scan image và so sánh base image
 
-#### Scan bằng Docker Scout
+#### Scan các image bằng Docker Scout
 
-Docker Engine trên Linux có thể không cài sẵn Docker Scout. Kiểm tra:
+Docker Scout không phải lúc nào cũng được cài sẵn cùng Docker Engine trên Linux. Mentor kiểm tra trước:
 
 ```bash
 docker scout version
 ```
 
-Nếu chưa có, cài theo script chính thức. Em tải script về trước để có thể đọc lại nội dung:
+Nếu output báo:
+
+```text
+docker: unknown command: docker scout
+```
+
+thì tải script cài đặt chính thức về máy:
 
 ```bash
 curl -fsSL \
   https://raw.githubusercontent.com/docker/scout-cli/main/install.sh \
   -o /tmp/install-scout.sh
+```
 
-less /tmp/install-scout.sh
+
+Cài Docker Scout CLI:
+
+```bash
 sh /tmp/install-scout.sh
+```
 
+Script cài plugin vào thư mục Docker CLI plugin của user, thường là:
+
+```text
+$HOME/.docker/cli-plugins/docker-scout
+```
+
+Kiểm tra sau khi cài:
+
+```bash
 docker scout version
 ```
 
-Scan nhanh image local:
+Output sẽ có dạng:
+
+```text
+version: v1.x.x
+git commit: <commit-sha>
+```
+
+Docker daemon phải đang chạy vì phần này scan các local image:
+
+```bash
+docker info >/dev/null &&
+  echo "Docker daemon is running"
+```
+
+Nếu lệnh thất bại, khởi động Docker trên máy dùng systemd:
+
+```bash
+sudo systemctl start docker
+```
+
+Mentor cần build image chính và bốn runtime variant trước khi scan:
+
+```bash
+docker build \
+  -t demo-app:1.0.0 .
+
+docker build \
+  -f variants/Dockerfile.node \
+  -t demo-app:node20 .
+
+docker build \
+  -f Dockerfile \
+  -t demo-app:node20-alpine .
+
+docker build \
+  -f variants/Dockerfile.slim \
+  -t demo-app:node20-slim .
+
+docker build \
+  -f variants/Dockerfile.distroless \
+  -t demo-app:distroless .
+```
+
+Các tag em đã build:
+
+```bash
+docker image ls demo-app \
+  --format '{{.Repository}}:{{.Tag}} | {{.ID}} | {{.Size}}'
+```
+
+Output:
+
+```text
+demo-app:1.0.0         | 65a5b6812ac6 | 193MB
+demo-app:node20        | 0d7019539315 | 1.58GB
+demo-app:node20-alpine | d2898e60e348 | 193MB
+demo-app:node20-slim   | f1825b652e2f | 290MB
+demo-app:distroless    | 81a3dc7a2470 | 170MB
+```
+
+`demo-app:1.0.0` và `demo-app:node20-alpine` cùng dùng Dockerfile/runtime Alpine nhưng được build ở hai thời điểm khác nhau, nên chúng có image ID khác nhau. Vì vậy em scan cả hai.
+
+Scan toàn bộ năm image và lưu output:
 
 ```bash
 mkdir -p reports
 
-docker scout quickview \
-  local://demo-app:1.0.0 \
-  2>&1 | tee reports/scout-quickview.txt
+for tag in 1.0.0 node20 node20-slim node20-alpine distroless
+do
+  echo "Scanning demo-app:$tag ..."
+
+  docker scout cves \
+    "local://demo-app:$tag" \
+    > "reports/scout-cves-$tag.txt" 2>&1
+done
 ```
 
-Xem chi tiết CVE mức High và Critical:
+`local://` yêu cầu Scout scan image trong local Docker image store.
+
+Kiểm tra các report đã được tạo:
+
+```bash
+ls -lh reports/scout-cves-*.txt
+
+for report in reports/scout-cves-*.txt
+do
+  echo "===== $report ====="
+  grep -E \
+    'vulnerabilities found in|No vulnerable packages detected' \
+    "$report"
+done
+```
+
+Nếu muốn vừa xem output trên terminal vừa lưu report, có thể chạy riêng một image bằng `tee`:
 
 ```bash
 docker scout cves \
-  --only-severity high,critical \
-  local://demo-app:1.0.0 \
-  2>&1 | tee reports/scout-cves.txt
+  local://demo-app:node20-alpine \
+  2>&1 |
+  tee reports/scout-cves-node20-alpine.txt
 ```
 
-`local://` yêu cầu Scout chỉ dùng image trong local image store, không tự fallback sang registry.
+Các report:
 
-Ảnh kết quả em đã chạy:
+- [demo-app:1.0.0](./reports/scout-cves-1.0.0.txt)
+- [node:20](./reports/scout-cves-node20.txt)
+- [node:20-slim](./reports/scout-cves-node20-slim.txt)
+- [node:20-alpine](./reports/scout-cves-node20-alpine.txt)
+- [Distroless Node.js](./reports/scout-cves-distroless.txt)
 
-![Docker Scout quickview](./screenshots/docker-scout-scanning.png)
+Kết quả tại thời điểm em scan:
 
-Report dạng text: [reports/scout-quickview.txt](./reports/scout-quickview.txt).
+| Runtime image | Package được index | Critical | High | Medium | Low | Unspecified |
+|---|---:|---:|---:|---:|---:|---:|
+| `demo-app:1.0.0` | 217 | 1 | 19 | 8 | 4 | 0 |
+| `demo-app:node20` | 742 | 2 | 64 | 74 | 220 | 23 |
+| `demo-app:node20-slim` | 320 | 1 | 26 | 15 | 34 | 2 |
+| `demo-app:node20-alpine` | 217 | 1 | 19 | 8 | 4 | 0 |
+| `demo-app:distroless` | 14 | 0 | 0 | 0 | 0 | 0 |
 
-Output chính:
+Tổng số vulnerability:
 
 ```text
-✓ Indexed 217 packages
-✓ Provenance obtained from attestation
-
-Target             local://demo-app:1.0.0     1C  19H  8M  4L
-Base image         node:20-alpine             1C  19H  8M  4L
-Updated base image node:24-alpine             0C   1H  5M  2L
+1.0.0         :  32 vulnerabilities trong 9 package
+node20        : 383 vulnerabilities trong 60 package
+node20-slim   :  78 vulnerabilities trong 23 package
+node20-alpine :  32 vulnerabilities trong 9 package
+distroless    :   0 vulnerable package được phát hiện
 ```
 
-Giải thích:
+Nhận xét của em:
 
-- `Indexed 217 packages`: Scout tạo SBOM và nhận diện 217 package/thành phần trong image. Con số này gồm package của Alpine, Node.js runtime và metadata liên quan, không có nghĩa source app đã khai báo 217 npm dependency.
-- `Provenance obtained from attestation`: image có provenance attestation do BuildKit tạo. Scout dùng metadata này để xác định quá trình build và base image.
-- `Target local://demo-app:1.0.0`: image được scan trực tiếp từ local Docker image store.
-- `digest 65a5b6812ac6`: định danh nội dung của image. Digest giúp xác định chính xác image đã scan thay vì chỉ dựa vào tag có thể thay đổi.
-- `1C 19H 8M 4L`: Scout tìm thấy `1 Critical`, `19 High`, `8 Medium`, `4 Low` tại thời điểm scan.
-- Dòng `Base image node:20-alpine` có cùng số CVE với target. App của em chỉ copy một file JavaScript và không cài npm package, nên kết quả cho thấy phần lớn vấn đề đến từ base image/runtime thay vì dependency của application.
-- Scout đề xuất `node:24-alpine` và ước tính còn `0 Critical`, `1 High`, `5 Medium`, `2 Low`, tức giảm `1 Critical`, `18 High`, `3 Medium`, `2 Low`.
+- Bản `node:20` đầy đủ có nhiều package nhất nên số CVE được phát hiện cao nhất.
+- Bản `slim` đã giảm đáng kể package và CVE so với bản đầy đủ.
+- Image chính `1.0.0` và variant `node20-alpine` có cùng kết quả vì đều dùng runtime `node:20-alpine`.
+- Bản Alpine nhỏ hơn và có ít CVE hơn Slim trong lần scan này.
+- Distroless chỉ có 14 package được Scout index và không phát hiện package dễ tổn thương tại thời điểm scan.
+- Kết quả `0 vulnerability` không có nghĩa image chắc chắn an toàn tuyệt đối. Scout chỉ báo lỗi đã biết trong database và các package nó nhận diện được.
+- Số CVE có thể thay đổi khi vulnerability database hoặc base image được cập nhật.
 
+Ảnh quickview của image Alpine:
 
-Lưu ý: vulnerability database thay đổi theo thời gian nên số CVE mentor nhận được có thể khác kết quả lúc em làm bài.
+![Docker Scout scan](./screenshots/docker-scout-scanning.png)
 
 #### Build bốn runtime variant
 
@@ -380,7 +493,11 @@ day-5-docker/
 ├── .dockerignore
 ├── network-volume.md
 ├── reports/
-│   └── scout-quickview.txt
+│   ├── scout-cves-1.0.0.txt
+│   ├── scout-cves-node20.txt
+│   ├── scout-cves-node20-slim.txt
+│   ├── scout-cves-node20-alpine.txt
+│   └── scout-cves-distroless.txt
 ├── variants/
 │   ├── Dockerfile.node
 │   ├── Dockerfile.slim
@@ -396,7 +513,7 @@ Kết quả chính:
 - PostgreSQL giữ dữ liệu bằng named volume.
 - Nginx phản ánh thay đổi bind mount từ host.
 - Image đã được push lên Docker Hub và pull/run lại thành công.
-- Docker Scout đã index 217 package và báo `1 Critical`, `19 High`, `8 Medium`, `4 Low`.
+- Docker Scout đã scan đủ năm image đã build và lưu report riêng.
 - Distroless là variant nhỏ nhất trong lần benchmark: 170MB.
 
 ## 4. Khó khăn & cách giải quyết
@@ -411,9 +528,9 @@ Kết quả chính:
 
 - **Phân biệt bind mount và named volume:** named volume phù hợp dữ liệu database do Docker quản lý; bind mount phù hợp file cần sửa trực tiếp từ host như HTML/config.
 
-- **Docker Scout không có sẵn trong Docker Engine:** lệnh `docker scout` ban đầu trả về `unknown command`. Em cài Scout CLI theo hướng dẫn chính thức, sau đó chạy `quickview` thành công và lưu cả screenshot lẫn text report.
+- **Docker Scout không có sẵn trong Docker Engine:** lệnh `docker scout` ban đầu trả về `unknown command`. Em cài Scout CLI theo hướng dẫn chính thức rồi scan từng image local.
 
-- **Scout đề xuất nâng từ Node.js 20 lên Node.js 24:** recommendation giúp giảm nhiều CVE nhưng đây là major-version upgrade. Em không thay base image chính ngay mà ghi nhận đề xuất, sau đó cần kiểm thử compatibility trước khi áp dụng.
+- **Hai image Alpine có kết quả giống nhau:** `demo-app:1.0.0` và `demo-app:node20-alpine` được build từ cùng Dockerfile nhưng có image ID khác nhau do build ở thời điểm khác nhau. Em vẫn scan cả hai theo yêu cầu; kết quả CVE giống nhau vì runtime content tương đương.
 
 - **Distroless không có shell và user `node`:** em dùng image `:nonroot`, copy file với UID/GID `65532`, dùng đường dẫn `/nodejs/bin/node` cho healthcheck và chỉ truyền `server.js` vào `CMD` vì image đã có Node.js entrypoint.
 
