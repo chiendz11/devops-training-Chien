@@ -2,5 +2,4 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
-2-aws/.tfvars.example
 tfplan
