@@ -1,0 +1,5 @@
+region          = "ap-southeast-1"
+owner           = "Bui Anh Chien"
+project_name    = "devops-training"
+bucket_prefix   = "tfstate-chienqt"
+lock_table_name = "tfstate-lock"
