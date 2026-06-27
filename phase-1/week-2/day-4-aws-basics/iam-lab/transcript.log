@@ -1,0 +1,61 @@
+++++ aws --profile default sts get-caller-identity
+{
+    "UserId": "AIDA6IW7G2TMFMDH3KWQG",
+    "Account": "980794397912",
+    "Arn": "arn:aws:iam::980794397912:user/Chienqt"
+}
+++++ aws --profile default iam create-group --group-name s3-readonly
+{
+    "Group": {
+        "Path": "/",
+        "GroupName": "s3-readonly",
+        "GroupId": "AGPA6IW7G2TMPXHEEDQXD",
+        "Arn": "arn:aws:iam::980794397912:group/s3-readonly",
+        "CreateDate": "2026-06-27T14:36:23+00:00"
+    }
+}
+++++ aws --profile default iam attach-group-policy --group-name s3-readonly --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+++++ aws --profile default iam create-user --user-name test-ro
+{
+    "User": {
+        "Path": "/",
+        "UserName": "test-ro",
+        "UserId": "AIDA6IW7G2TMMPXJLG3OS",
+        "Arn": "arn:aws:iam::980794397912:user/test-ro",
+        "CreateDate": "2026-06-27T14:36:26+00:00"
+    }
+}
+++++ aws --profile default iam add-user-to-group --group-name s3-readonly --user-name test-ro
+++++ aws --profile default s3 mb s3://iam-lab-readonly-980794397912-8450 --region ap-southeast-1
+make_bucket: iam-lab-readonly-980794397912-8450
+++++ printf 'read-only test\n'
+++++ aws --profile default s3 cp /tmp/existing.txt s3://iam-lab-readonly-980794397912-8450/existing.txt
+Completed 15 Bytes/15 Bytes (2 Bytes/s) with 1 file(s) remainingupload: ../../../../../../../tmp/existing.txt to s3://iam-lab-readonly-980794397912-8450/existing.txt
+
+# Access key and profile configured; secret intentionally redacted.
+++++ aws --profile test-ro sts get-caller-identity
+{
+    "UserId": "AIDA6IW7G2TMMPXJLG3OS",
+    "Account": "980794397912",
+    "Arn": "arn:aws:iam::980794397912:user/test-ro"
+}
+++++ aws --profile test-ro s3 ls
+2026-04-20 23:04:23 facedetector-tf-state-storage
+2026-06-27 21:36:31 iam-lab-readonly-980794397912-8450
+++++ aws --profile test-ro s3 ls s3://iam-lab-readonly-980794397912-8450/
+2026-06-27 21:36:37         15 existing.txt
+++++ aws --profile test-ro s3 cp s3://iam-lab-readonly-980794397912-8450/existing.txt -
+read-only test
+++++ printf 'upload must fail\n'
+++++ aws --profile test-ro s3 cp /tmp/test.txt s3://iam-lab-readonly-980794397912-8450/test.txt
+Completed 17 Bytes/17 Bytes (76 Bytes/s) with 1 file(s) remainingupload failed: ../../../../../../../tmp/test.txt to s3://iam-lab-readonly-980794397912-8450/test.txt An error occurred (AccessDenied) when calling the PutObject operation: User: arn:aws:iam::980794397912:user/test-ro is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::iam-lab-readonly-980794397912-8450/test.txt" because no identity-based policy allows the s3:PutObject action
+++++ UPLOAD_EXIT_CODE=1
+++++ '[' 1 -ne 0 ']'
+++++ echo 'PASS: Upload was blocked with AccessDenied'
+PASS: Upload was blocked with AccessDenied
+++++ set +x
++ aws iam update-access-key --access-key-id <REDACTED> --status Inactive
+++++ aws --profile default iam list-access-keys --user-name test-ro --query 'AccessKeyMetadata[].Status'
+[
+    "Inactive"
+]
