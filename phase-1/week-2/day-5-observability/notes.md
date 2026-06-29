@@ -303,17 +303,21 @@ qua OTLP đến OpenTelemetry Collector.
 
 ```text
 Application
-    │ OTLP gRPC/HTTP
-    ▼
+  └── OpenTelemetry SDK
+        ├── tạo metrics
+        ├── tạo logs
+        ├── tạo traces/spans
+        ├── có thể batch
+        └── gửi OTLP
+              ↓
 OpenTelemetry Collector
-    ├── batch
-    ├── retry
-    ├── filter/redact
-    └── export
-          ├── Prometheus
-          ├── Grafana Tempo
-          ├── Loki
-          └── vendor observability
+  ├── receive
+  ├── batch
+  ├── retry
+  ├── queue
+  ├── filter/redact
+  ├── transform
+  └── export sang backend
 ```
 
 Collector giúp application không phụ thuộc trực tiếp vào backend observability.
