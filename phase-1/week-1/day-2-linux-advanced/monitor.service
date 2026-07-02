@@ -1,0 +1,18 @@
+[Unit]
+Description=CPU and memory monitoring service
+After=network.target
+
+[Service]
+Type=simple
+User=chienqt
+WorkingDirectory=/opt/monitor
+Environment=INTERVAL=10
+Environment=CPU_THRESHOLD=80
+Environment=LOG_FILE=/home/chienqt/monitor.log
+ExecStart=/opt/monitor/monitor.sh
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target
