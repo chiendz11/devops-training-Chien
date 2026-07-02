@@ -1,0 +1,54 @@
+++++ git bisect start
+status: waiting for both good and bad commits
+++++ git bisect bad HEAD
+status: waiting for good commit(s), bad commit known
+++++ git bisect good d2880394a42c9d47df5d2173f7281f4fb7b58b68
+Bisecting: 9 revisions left to test after this (roughly 3 steps)
+[4007ec83f065f09db3e7946d19be716be528bb78] chore: bug hunt commit 10
+++++ git bisect run bash -c 'test "$(python app.py)" = "OK"'
+running 'bash' '-c' 'test "$(python app.py)" = "OK"'
+Bisecting: 4 revisions left to test after this (roughly 2 steps)
+[1da164cd8dd88134d9e3d03e5952458eb6ba50e0] chore: bug hunt commit 15
+running 'bash' '-c' 'test "$(python app.py)" = "OK"'
+Bisecting: 2 revisions left to test after this (roughly 1 step)
+[c7243dcbda6f938da39c76c64cb0172fe5d12c85] chore: bug hunt commit 12
+running 'bash' '-c' 'test "$(python app.py)" = "OK"'
+Bisecting: 0 revisions left to test after this (roughly 1 step)
+[91d869f8368e6dafa7fd7cbd48b8c8666ce6d94d] chore: bug hunt commit 14
+running 'bash' '-c' 'test "$(python app.py)" = "OK"'
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[27b3577385f73ba74951cb05d97e6ccb39567415] chore: bug hunt commit 13
+running 'bash' '-c' 'test "$(python app.py)" = "OK"'
+27b3577385f73ba74951cb05d97e6ccb39567415 is the first bad commit
+commit 27b3577385f73ba74951cb05d97e6ccb39567415
+Author: Bùi Anh Chiến <buianhchien290405@gmail.com>
+Date:   Fri Jun 19 17:42:29 2026 +0700
+
+    chore: bug hunt commit 13
+
+ app.py       | 2 +-
+ progress.txt | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+bisect found first bad commit
+++++ git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# bad: [2f1c4891207e32527ad68f5d0afe38455ed7de4d] chore: bug hunt commit 20
+git bisect bad 2f1c4891207e32527ad68f5d0afe38455ed7de4d
+# status: waiting for good commit(s), bad commit known
+# good: [d2880394a42c9d47df5d2173f7281f4fb7b58b68] fix: apply critical hotfix
+git bisect good d2880394a42c9d47df5d2173f7281f4fb7b58b68
+# good: [4007ec83f065f09db3e7946d19be716be528bb78] chore: bug hunt commit 10
+git bisect good 4007ec83f065f09db3e7946d19be716be528bb78
+# bad: [1da164cd8dd88134d9e3d03e5952458eb6ba50e0] chore: bug hunt commit 15
+git bisect bad 1da164cd8dd88134d9e3d03e5952458eb6ba50e0
+# good: [c7243dcbda6f938da39c76c64cb0172fe5d12c85] chore: bug hunt commit 12
+git bisect good c7243dcbda6f938da39c76c64cb0172fe5d12c85
+# bad: [91d869f8368e6dafa7fd7cbd48b8c8666ce6d94d] chore: bug hunt commit 14
+git bisect bad 91d869f8368e6dafa7fd7cbd48b8c8666ce6d94d
+# bad: [27b3577385f73ba74951cb05d97e6ccb39567415] chore: bug hunt commit 13
+git bisect bad 27b3577385f73ba74951cb05d97e6ccb39567415
+# first bad commit: [27b3577385f73ba74951cb05d97e6ccb39567415] chore: bug hunt commit 13
+++++ git bisect reset
+Previous HEAD position was 27b3577 chore: bug hunt commit 13
+Switched to branch 'bug-hunt'
