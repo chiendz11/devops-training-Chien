@@ -1,0 +1,26 @@
+    ...Storing image for indexing
+    ✓ Image stored for indexing
+    ...Indexing
+    ✓ Indexed 14 packages
+    ✓ Provenance obtained from attestation
+    ✓ No vulnerable package detected
+
+
+## Overview
+
+                   │                   Analyzed Image                   
+───────────────────┼────────────────────────────────────────────────────
+ Target            │  local://demo-app:distroless                       
+   digest          │  81a3dc7a2470                                      
+   platform        │ linux/amd64                                        
+   provenance      │ git@github.com:chiendz11/devops-training-Chien.git 
+                   │  https://github.com/chiendz11/devops-training-Chien/blob/610c831e271b7faf1b76f27ca102c3791702b91a          
+   vulnerabilities │    0C     0H     0M     0L                         
+   size            │ 45 MB                                              
+   packages        │ 14                                                 
+
+
+## Packages and Vulnerabilities
+
+  No vulnerable packages detected
+
