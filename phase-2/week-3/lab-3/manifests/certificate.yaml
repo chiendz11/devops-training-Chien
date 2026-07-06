@@ -1,0 +1,33 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-local
+  namespace: lab2
+spec:
+  secretName: app-local-tls
+  commonName: app.local
+
+  subject:
+    organizations:
+      - DevOps Training
+
+  dnsNames:
+    - app.local
+
+  duration: 2160h
+  renewBefore: 360h
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    rotationPolicy: Always
+
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  issuerRef:
+    name: selfsigned-cluster-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
