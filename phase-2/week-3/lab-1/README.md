@@ -2,7 +2,7 @@
 
 - **Intern**: `Bùi Anh Chiến`
 - **Phase / Week / Day**: `Phase 2 / Week 3 / Day 1`
-- **Branch**: `phase-1/week-3/day-1-kubernetes-first-cluster`
+- **Branch**: `phase-2/week-3/day-1-kubernetes-first-cluster`
 - **Submitted at**: `2026-07-06` (timezone +07)
 - **Time spent**: `4 giờ`
 
