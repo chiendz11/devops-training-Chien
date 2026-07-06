@@ -1,10 +1,10 @@
 # Task: Kubernetes — First Cluster
 
 - **Intern**: `Bùi Anh Chiến`
-- **Phase / Week / Day**: `Phase 1 / Week 3 / Day 1`
+- **Phase / Week / Day**: `Phase 2 / Week 3 / Day 1`
 - **Branch**: `phase-1/week-3/day-1-kubernetes-first-cluster`
 - **Submitted at**: `2026-07-06` (timezone +07)
-- **Time spent**: `2 giờ`
+- **Time spent**: `4 giờ`
 
 ## 1. Mục tiêu
 
@@ -26,7 +26,12 @@ kubectl get pod web -n lab1 -o yaml > manifests/web-pod.yaml
 kubectl get service web -n lab1 -o yaml > manifests/web-service.yaml
 ```
 
-Dọn dẹp sau khi kiểm tra: `kubectl delete namespace lab1`.
+Dọn dẹp sau khi kiểm tra:
+
+```bash
+kubectl delete namespace lab1
+k3d cluster delete dev
+```
 
 ## 3. Kết quả
 
