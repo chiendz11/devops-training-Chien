@@ -8,8 +8,7 @@
 
 ## 1. Mục tiêu
 
-Tạo Kubernetes cluster local bằng k3d, làm quen với `kubectl`, deploy Pod Nginx
-và dùng ClusterIP Service để truy cập Pod trong cluster.
+Tạo cluster k3d, deploy Pod Nginx và truy cập Pod qua ClusterIP Service.
 
 ## 2. Cách chạy
 
@@ -18,10 +17,13 @@ Máy mentor cần có Docker, k3d và kubectl:
 ```bash
 k3d cluster create dev --agents 2 -p "8080:80@loadbalancer"
 kubectl create namespace lab1
-kubectl apply -f manifests/
+kubectl run web -n lab1 --image=nginx:alpine --port=80 --labels="app=web"
 kubectl wait -n lab1 --for=condition=Ready pod/web --timeout=120s
+kubectl expose pod web -n lab1 --type=ClusterIP --port=80 --target-port=80
 kubectl get nodes && kubectl get all -n lab1
 kubectl run curl-test -n lab1 --image=curlimages/curl --restart=Never --rm -i -- curl -fsS http://web
+kubectl get pod web -n lab1 -o yaml > manifests/web-pod.yaml
+kubectl get service web -n lab1 -o yaml > manifests/web-service.yaml
 ```
 
 Dọn dẹp sau khi kiểm tra: `kubectl delete namespace lab1`.
@@ -29,14 +31,13 @@ Dọn dẹp sau khi kiểm tra: `kubectl delete namespace lab1`.
 ## 3. Kết quả
 
 - Cluster gồm một server/control-plane và hai agent node đều `Ready`.
-- Pod `web` chạy image `nginx:alpine` và có trạng thái `Running`.
-- Service `web` loại ClusterIP chuyển traffic từ port `80` tới Pod.
-- Manifest nằm trong [`manifests/`](./manifests/) và ảnh minh chứng trong [`screenshots/`](./screenshots/).
+- Pod Nginx `web` ở trạng thái `Running`; ClusterIP Service chuyển port `80` tới Pod.
+- Manifest được export sau khi tạo resource; ảnh minh chứng nằm trong [`screenshots/`](./screenshots/).
 
 ## 4. Khó khăn & cách giải quyết
 
 - ClusterIP không truy cập trực tiếp từ host → kiểm tra bằng Pod `curl-test`.
-- YAML export chứa state runtime → rút gọn thành manifest khai báo để chạy lại trên cluster sạch.
+- YAML export chứa state runtime → loại bỏ field do cluster tự sinh trước khi commit.
 
 ## 5. Reference
 
@@ -44,6 +45,5 @@ Dọn dẹp sau khi kiểm tra: `kubectl delete namespace lab1`.
 
 ## 6. Self-check
 
-- [x] Cluster có ba node `Ready`.
-- [x] Pod và Service tạo được từ manifest.
+- [x] Pod và Service được tạo bằng lệnh `kubectl`.
 - [x] Service trả về trang Nginx trong cluster.
