@@ -138,9 +138,24 @@ readinessProbe:
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: null
+  behavior: {}
+
+vpa:
+  enabled: false
+  updateMode: "Off"
+  controlledResources:
+    - cpu
+    - memory
+  controlledValues: RequestsOnly
+  minAllowed:
+    cpu: 10m
+    memory: 16Mi
+  maxAllowed:
+    cpu: 500m
+    memory: 512Mi
 
 # Additional volumes on the output Deployment definition.
 volumes: []

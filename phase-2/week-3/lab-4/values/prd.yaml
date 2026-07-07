@@ -16,3 +16,23 @@ resources:
   limits:
     cpu: 500m
     memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+vpa:
+  enabled: true
+  updateMode: "Off"
+  controlledResources:
+    - cpu
+    - memory
+  controlledValues: RequestsOnly
+  minAllowed:
+    cpu: 50m
+    memory: 64Mi
+  maxAllowed:
+    cpu: "1"
+    memory: 1Gi
