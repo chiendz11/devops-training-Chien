@@ -1,0 +1,5 @@
+image        = "ghcr.io/chiendz11/demo-app:v1.2.1"
+replicas     = 2
+env          = "dev"
+ingress_host = "dev.demo.local"
+

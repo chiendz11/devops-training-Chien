@@ -1,0 +1,7 @@
+image: ghcr.io/chiendz11/demo-app:v1.2.1
+replicas: 1
+env: dev
+
+ingress:
+  host: dev.demo.local
+
