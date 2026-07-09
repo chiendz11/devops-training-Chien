@@ -1,0 +1,9 @@
+state_bucket    = "<state-bucket>"
+lock_table_name = "<lock-table>"
+aws_region      = "ap-southeast-1"
+
+replicas_by_workspace = {
+  dev = 2
+  stg = 3
+}
+
