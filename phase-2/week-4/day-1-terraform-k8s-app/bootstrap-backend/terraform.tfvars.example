@@ -1,0 +1,5 @@
+region          = "ap-southeast-1"
+bucket_name     = "tfstate-week4-day1-<account-id>-ap-southeast-1"
+lock_table_name = "tf-lock-week4-day1"
+owner           = "Bui Anh Chien"
+

@@ -1,0 +1,6 @@
+bucket         = "tfstate-week4-day1-<account-id>-ap-southeast-1"
+key            = "week4/day1/stg.tfstate"
+region         = "ap-southeast-1"
+dynamodb_table = "tf-lock-week4-day1"
+encrypt        = true
+
