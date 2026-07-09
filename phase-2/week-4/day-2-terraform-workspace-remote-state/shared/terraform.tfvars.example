@@ -1,0 +1,2 @@
+image         = "ghcr.io/chiendz11/demo-app:v1.2.1"
+domain_suffix = "day2.demo.local"

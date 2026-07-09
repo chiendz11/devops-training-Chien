@@ -1,0 +1,7 @@
+bucket               = "tfstate-week4-day1-<account-id>-ap-southeast-1"
+key                  = "app.tfstate"
+workspace_key_prefix = "week4/day2/workspaces"
+region               = "ap-southeast-1"
+dynamodb_table       = "tf-lock-week4-day1"
+encrypt              = true
+
