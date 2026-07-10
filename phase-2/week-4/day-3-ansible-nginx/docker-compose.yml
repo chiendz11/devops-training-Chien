@@ -1,0 +1,32 @@
+services:
+  nginx1:
+    build:
+      context: ./docker/ssh-host
+    container_name: ansible-nginx-1
+    hostname: nginx1
+    ports:
+      - "2221:22"
+      - "8081:80"
+      - "8441:443"
+    volumes:
+      - ./.ssh/ansible_lab.pub:/tmp/ansible_lab.pub:ro
+    networks:
+      - ansible_lab
+
+  nginx2:
+    build:
+      context: ./docker/ssh-host
+    container_name: ansible-nginx-2
+    hostname: nginx2
+    ports:
+      - "2222:22"
+      - "8082:80"
+      - "8442:443"
+    volumes:
+      - ./.ssh/ansible_lab.pub:/tmp/ansible_lab.pub:ro
+    networks:
+      - ansible_lab
+
+networks:
+  ansible_lab:
+    name: ansible-nginx-lab
