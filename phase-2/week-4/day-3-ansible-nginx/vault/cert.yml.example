@@ -1,0 +1,12 @@
+---
+# Copy/generate this file as vault/cert.yml, then encrypt it with ansible-vault.
+# The real vault/cert.yml is ignored by Git because it contains private key data.
+nginx_tls_cert: |
+  -----BEGIN CERTIFICATE-----
+  demo certificate content
+  -----END CERTIFICATE-----
+nginx_tls_key: |
+  -----BEGIN PRIVATE KEY-----
+  demo private key content
+  -----END PRIVATE KEY-----
+
