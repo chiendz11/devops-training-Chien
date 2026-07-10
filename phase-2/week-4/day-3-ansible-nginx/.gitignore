@@ -1,0 +1,5 @@
+vault/cert.yml
+vault/.vault-pass
+.ssh/
+*.retry
+transcript.log
