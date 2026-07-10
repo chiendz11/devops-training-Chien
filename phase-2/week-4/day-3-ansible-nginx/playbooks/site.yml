@@ -1,0 +1,9 @@
+---
+- name: Configure nginx on Docker SSH hosts
+  hosts: nginx
+  become: true
+  vars_files:
+    - ../vault/cert.yml
+  roles:
+    - nginx
+

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Ansible nginx lab</title>
+  </head>
+  <body>
+    <h1>Hello from {{ nginx_instance_name }}</h1>
+    <p>Managed by Ansible role <code>nginx</code>.</p>
+    <ul>
+      <li>Inventory host: {{ inventory_hostname }}</li>
+      <li>Server name: {{ nginx_server_name }}</li>
+      <li>Environment: {{ nginx_environment }}</li>
+    </ul>
+  </body>
+</html>
+

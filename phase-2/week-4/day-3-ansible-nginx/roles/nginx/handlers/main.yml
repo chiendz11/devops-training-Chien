@@ -1,0 +1,7 @@
+---
+- name: reload nginx
+  ansible.builtin.shell: nginx -t && (nginx -s reload || nginx)
+  args:
+    executable: /bin/bash
+  changed_when: true
+

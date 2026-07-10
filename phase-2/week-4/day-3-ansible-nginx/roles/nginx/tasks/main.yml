@@ -1,0 +1,92 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: "{{ nginx_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Create nginx document root
+  ansible.builtin.file:
+    path: "{{ nginx_doc_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+
+- name: Render demo index page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ nginx_doc_root }}/index.html"
+    owner: www-data
+    group: www-data
+    mode: "0644"
+  notify: reload nginx
+
+- name: Create TLS certificate directory
+  ansible.builtin.file:
+    path: "{{ nginx_tls_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Install TLS certificate from Ansible Vault
+  ansible.builtin.copy:
+    content: "{{ nginx_tls_cert }}"
+    dest: "{{ nginx_tls_cert_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  no_log: true
+  notify: reload nginx
+
+- name: Install TLS private key from Ansible Vault
+  ansible.builtin.copy:
+    content: "{{ nginx_tls_key }}"
+    dest: "{{ nginx_tls_key_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+  notify: reload nginx
+
+- name: Render nginx virtual host config
+  ansible.builtin.template:
+    src: demo.conf.j2
+    dest: /etc/nginx/sites-available/demo.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload nginx
+
+- name: Enable demo virtual host
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/demo.conf
+    dest: /etc/nginx/sites-enabled/demo.conf
+    state: link
+  notify: reload nginx
+
+- name: Disable default virtual host
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+
+- name: Validate nginx config
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+- name: Ensure nginx process is running inside container
+  ansible.builtin.shell: |
+    if pgrep nginx >/dev/null 2>&1; then
+      echo "already-running"
+    else
+      nginx
+      echo "started"
+    fi
+  args:
+    executable: /bin/bash
+  register: nginx_process
+  changed_when: "'started' in nginx_process.stdout"
+

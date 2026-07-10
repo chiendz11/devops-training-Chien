@@ -1,0 +1,10 @@
+---
+nginx_package_name: nginx
+nginx_environment: lab
+nginx_doc_root: /var/www/demo-app
+nginx_http_port: 80
+nginx_https_port: 443
+nginx_tls_dir: /etc/nginx/certs
+nginx_tls_cert_path: /etc/nginx/certs/demo.crt
+nginx_tls_key_path: /etc/nginx/certs/demo.key
+
