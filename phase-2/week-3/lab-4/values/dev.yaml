@@ -5,6 +5,24 @@ image:
   tag: "v1.1.0"
   pullPolicy: IfNotPresent
 
+config:
+  enabled: true
+  data:
+    NAME: dev
+    APP_ENV: development
+    LOG_LEVEL: debug
+    FEATURE_GREETING: "true"
+
+secret:
+  enabled: true
+  stringData:
+    API_KEY: dev-demo-api-key
+    DB_PASSWORD: dev-demo-password
+
+projectedConfig:
+  enabled: true
+  mountPath: /etc/demo-app/config
+
 service:
   type: ClusterIP
   port: 80

@@ -5,6 +5,24 @@ image:
   tag: "v1.2.0"
   pullPolicy: IfNotPresent
 
+config:
+  enabled: true
+  data:
+    NAME: prd
+    APP_ENV: production
+    LOG_LEVEL: warn
+    FEATURE_GREETING: "false"
+
+secret:
+  enabled: true
+  stringData:
+    API_KEY: prd-demo-api-key
+    DB_PASSWORD: prd-demo-password
+
+projectedConfig:
+  enabled: true
+  mountPath: /etc/demo-app/config
+
 service:
   type: ClusterIP
   port: 80
