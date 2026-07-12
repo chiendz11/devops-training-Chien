@@ -1,0 +1,16 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "postgres-longhorn.pvcName" . }}
+  labels:
+    {{- include "postgres-longhorn.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.storageClass.name | quote }}
+  accessModes:
+    {{- toYaml .Values.persistence.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+{{- end }}
+

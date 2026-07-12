@@ -1,0 +1,53 @@
+replicaCount: 3
+
+image:
+  repository: postgres
+  tag: "16-alpine"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+
+postgres:
+  database: demo
+  user: demo
+  # Do not commit real passwords.
+  # Use postgres-values.secret.yaml locally or --set postgres.password=...
+  password: ""
+  pgdata: /var/lib/postgresql/data/pgdata
+
+storageClass:
+  create: true
+  name: postgres-longhorn
+  provisioner: driver.longhorn.io
+  reclaimPolicy: Delete
+  allowVolumeExpansion: true
+  volumeBindingMode: Immediate
+  parameters:
+    numberOfReplicas: "1"
+    staleReplicaTimeout: "30"
+    fsType: ext4
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+podSecurityContext:
+  fsGroup: 999
+
+securityContext: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

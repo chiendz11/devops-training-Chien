@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "postgres-longhorn.fullname" . }}-test-connection"
+  labels:
+    {{- include "postgres-longhorn.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: psql
+      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      command:
+        - sh
+        - -c
+        - pg_isready -h {{ include "postgres-longhorn.fullname" . }} -p {{ .Values.service.port }} -U {{ .Values.postgres.user }}
+      envFrom:
+        - secretRef:
+            name: {{ include "postgres-longhorn.secretName" . }}
+
