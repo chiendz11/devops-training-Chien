@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "postgres-longhorn.fullname" . }}
+  name: {{ include "postgres-localpath.fullname" . }}
   labels:
-    {{- include "postgres-longhorn.labels" . | nindent 4 }}
+    {{- include "postgres-localpath.labels" . | nindent 4 }}
 spec:
-  serviceName: {{ include "postgres-longhorn.fullname" . }}
+  serviceName: {{ include "postgres-localpath.fullname" . }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "postgres-longhorn.selectorLabels" . | nindent 6 }}
+      {{- include "postgres-localpath.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "postgres-longhorn.selectorLabels" . | nindent 8 }}
+        {{- include "postgres-localpath.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.podSecurityContext }}
       securityContext:
@@ -33,7 +33,7 @@ spec:
               protocol: TCP
           envFrom:
             - secretRef:
-                name: {{ include "postgres-longhorn.secretName" . }}
+                name: {{ include "postgres-localpath.secretName" . }}
           env:
             - name: PGDATA
               value: {{ .Values.postgres.pgdata | quote }}
@@ -47,7 +47,7 @@ spec:
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
-            claimName: {{ include "postgres-longhorn.pvcName" . }}
+            claimName: {{ include "postgres-localpath.pvcName" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -60,4 +60,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-

@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "postgres-longhorn.name" -}}
+{{- define "postgres-localpath.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "postgres-longhorn.fullname" -}}
+{{- define "postgres-localpath.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,9 +24,9 @@ Create a default fully qualified app name.
 {{/*
 Common labels.
 */}}
-{{- define "postgres-longhorn.labels" -}}
+{{- define "postgres-localpath.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-{{ include "postgres-longhorn.selectorLabels" . }}
+{{ include "postgres-localpath.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -34,22 +34,21 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels.
 */}}
-{{- define "postgres-longhorn.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "postgres-longhorn.name" . }}
+{{- define "postgres-localpath.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "postgres-localpath.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Secret name.
 */}}
-{{- define "postgres-longhorn.secretName" -}}
-{{- printf "%s-secret" (include "postgres-longhorn.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- define "postgres-localpath.secretName" -}}
+{{- printf "%s-secret" (include "postgres-localpath.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 PVC name.
 */}}
-{{- define "postgres-longhorn.pvcName" -}}
-{{- printf "%s-data" (include "postgres-longhorn.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- define "postgres-localpath.pvcName" -}}
+{{- printf "%s-data" (include "postgres-localpath.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
-

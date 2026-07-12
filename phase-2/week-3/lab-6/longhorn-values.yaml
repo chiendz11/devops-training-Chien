@@ -1,9 +1,0 @@
-# Values used to install Longhorn for this local lab.
-# The Postgres chart creates its own StorageClass named postgres-longhorn,
-# so Longhorn does not need to become the cluster default StorageClass.
-persistence:
-  defaultClass: false
-
-defaultSettings:
-  defaultReplicaCount: 1
-
