@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: "16-alpine"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+
+postgres:
+  database: demo
+  user: demo
+  # Do not commit real passwords.
+  # Use postgres-values.secret.yaml locally or --set postgres.password=...
+  password: ""
+  pgdata: /var/lib/postgresql/data/pgdata
+
+persistence:
+  enabled: true
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+podSecurityContext:
+  fsGroup: 999
+
+securityContext: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
