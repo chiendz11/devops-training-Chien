@@ -1,0 +1,6 @@
+apiVersion: v2
+name: rbac-netpol-lab
+description: RBAC, ServiceAccount and NetworkPolicy lab
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
