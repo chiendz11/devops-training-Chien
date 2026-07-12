@@ -1,0 +1,22 @@
+rbac:
+  enabled: true
+  readonlyServiceAccount: readonly-sa
+  deployerServiceAccount: deployer-sa
+
+workloads:
+  db:
+    name: db
+    image: nginx:1.27-alpine
+    port: 80
+
+  appClient:
+    name: app-client
+    image: curlimages/curl:8.11.1
+
+  attacker:
+    name: attacker
+    image: curlimages/curl:8.11.1
+
+networkPolicy:
+  enabled: true
+  defaultDenyIngress: true

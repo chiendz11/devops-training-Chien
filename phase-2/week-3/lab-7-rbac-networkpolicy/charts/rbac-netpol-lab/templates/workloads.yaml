@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.workloads.db.name }}
+  labels:
+    {{- include "rbac-netpol-lab.labels" . | nindent 4 }}
+    role: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.workloads.db.name }}
+      role: db
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.workloads.db.name }}
+        role: db
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.workloads.db.image }}
+          ports:
+            - containerPort: {{ .Values.workloads.db.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.workloads.db.name }}
+  labels:
+    {{- include "rbac-netpol-lab.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ .Values.workloads.db.name }}
+    role: db
+  ports:
+    - name: http
+      port: {{ .Values.workloads.db.port }}
+      targetPort: {{ .Values.workloads.db.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.workloads.appClient.name }}
+  labels:
+    {{- include "rbac-netpol-lab.labels" . | nindent 4 }}
+    role: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.workloads.appClient.name }}
+      role: app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.workloads.appClient.name }}
+        role: app
+    spec:
+      serviceAccountName: {{ .Values.rbac.readonlyServiceAccount }}
+      containers:
+        - name: curl
+          image: {{ .Values.workloads.appClient.image }}
+          command: ["sleep", "3600"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.workloads.attacker.name }}
+  labels:
+    {{- include "rbac-netpol-lab.labels" . | nindent 4 }}
+    role: attacker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.workloads.attacker.name }}
+      role: attacker
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.workloads.attacker.name }}
+        role: attacker
+    spec:
+      containers:
+        - name: curl
+          image: {{ .Values.workloads.attacker.image }}
+          command: ["sleep", "3600"]
