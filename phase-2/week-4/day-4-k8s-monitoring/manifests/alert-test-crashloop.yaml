@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alert-test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crashloop
+  namespace: alert-test
+  labels:
+    app: crashloop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crashloop
+  template:
+    metadata:
+      labels:
+        app: crashloop
+    spec:
+      containers:
+        - name: crashloop
+          image: busybox:1.36
+          command:
+            - /bin/sh
+            - -c
+            - "echo crashloop test; exit 1"
