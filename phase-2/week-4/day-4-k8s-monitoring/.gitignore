@@ -1,0 +1,4 @@
+rendered/
+*.tmp
+*.secret.yaml
+*.secret.env
