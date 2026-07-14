@@ -17,13 +17,10 @@ Máy mentor cần có Docker, k3d và kubectl:
 ```bash
 k3d cluster create dev --agents 2 -p "8080:80@loadbalancer"
 kubectl create namespace lab1
-kubectl run web -n lab1 --image=nginx:alpine --port=80 --labels="app=web"
+kubectl apply -f manifests/
 kubectl wait -n lab1 --for=condition=Ready pod/web --timeout=120s
-kubectl expose pod web -n lab1 --type=ClusterIP --port=80 --target-port=80
 kubectl get nodes && kubectl get all -n lab1
 kubectl run curl-test -n lab1 --image=curlimages/curl --restart=Never --rm -i -- curl -fsS http://web
-kubectl get pod web -n lab1 -o yaml > manifests/web-pod.yaml
-kubectl get service web -n lab1 -o yaml > manifests/web-service.yaml
 ```
 
 Dọn dẹp sau khi kiểm tra:
@@ -37,12 +34,12 @@ k3d cluster delete dev
 
 - Cluster gồm một server/control-plane và hai agent node đều `Ready`.
 - Pod Nginx `web` ở trạng thái `Running`; ClusterIP Service chuyển port `80` tới Pod.
-- Manifest được export sau khi tạo resource; ảnh minh chứng nằm trong [`screenshots/`](./screenshots/).
+- Pod và Service được quản lý bằng manifest trong [`manifests/`](./manifests/); ảnh minh chứng nằm trong [`screenshots/`](./screenshots/).
 
 ## 4. Khó khăn & cách giải quyết
 
 - ClusterIP không truy cập trực tiếp từ host → kiểm tra bằng Pod `curl-test`.
-- YAML export chứa state runtime → loại bỏ field do cluster tự sinh trước khi commit.
+- Manifest có khai báo `namespace: lab1` → tạo namespace trước khi chạy `kubectl apply`.
 
 ## 5. Reference
 
@@ -50,5 +47,5 @@ k3d cluster delete dev
 
 ## 6. Self-check
 
-- [x] Pod và Service được tạo bằng lệnh `kubectl`.
+- [x] Pod và Service được tạo từ manifest bằng `kubectl apply`.
 - [x] Service trả về trang Nginx trong cluster.
