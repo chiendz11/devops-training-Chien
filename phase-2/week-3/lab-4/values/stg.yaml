@@ -1,0 +1,38 @@
+replicaCount: 2
+containerPort: 3000
+image:
+  repository: ghcr.io/chiendz11/demo-app
+  tag: "v1.2.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
+
+vpa:
+  enabled: true
+  updateMode: "Off"
+  controlledResources:
+    - cpu
+    - memory
+  controlledValues: RequestsOnly
+  minAllowed:
+    cpu: 20m
+    memory: 32Mi
+  maxAllowed:
+    cpu: 500m
+    memory: 512Mi
