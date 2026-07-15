@@ -12,6 +12,8 @@ Tạo Helm chart cho `demo-app`, tách values `dev/stg/prd`, bật HPA và VPA r
 
 ## 2. Cách chạy
 
+### 2.1. Cài chart
+
 ```bash
 cd phase-2/week-3/lab-4
 # Scaffold chart ban đầu: helm create demo-app
@@ -23,10 +25,67 @@ for env in dev stg prd; do helm upgrade --install demo-app ./demo-app -n lab4-$e
 kubectl -n lab4-dev get deploy,pod,svc,hpa,vpa
 ```
 
+### 2.2. Chạy `test-connection.yaml` bằng Helm
+
+File [`test-connection.yaml`](./demo-app/templates/tests/test-connection.yaml) là
+Helm test hook vì có annotation `helm.sh/hook: test`. Không chạy trực tiếp
+`kubectl apply -f demo-app/templates/tests/test-connection.yaml` vì file vẫn chứa
+Go template như `{{ .Values.service.port }}`.
+
+Xem YAML hook sau khi Helm render với values của môi trường dev:
+
+```bash
+helm template demo-app ./demo-app \
+  -n lab4-dev \
+  -f values/dev.yaml \
+  --show-only templates/tests/test-connection.yaml
+
+helm get hooks demo-app -n lab4-dev
+```
+
+Chạy test theo cách chuẩn. Helm tạo Pod `demo-app-test-connection`; container
+BusyBox gọi Service `demo-app:80`. Command trả exit code `0` thì test `PASSED`:
+
+```bash
+helm test demo-app -n lab4-dev --logs
+kubectl -n lab4-dev get pod demo-app-test-connection -o wide
+kubectl -n lab4-dev logs pod/demo-app-test-connection
+kubectl -n lab4-dev describe pod demo-app-test-connection
+kubectl -n lab4-dev delete pod demo-app-test-connection --ignore-not-found
+```
+
+Kết quả mong đợi có `Phase: Succeeded` và `TEST SUITE: demo-app-test-connection`.
+
+### 2.3. Render rồi apply thủ công để quan sát
+
+Nếu muốn thực hành đúng thao tác `kubectl apply`, phải render template thành YAML
+thuần trước:
+
+```bash
+helm template demo-app ./demo-app \
+  -n lab4-dev \
+  -f values/dev.yaml \
+  --show-only templates/tests/test-connection.yaml \
+  > /tmp/demo-app-test-connection.yaml
+
+kubectl -n lab4-dev delete pod demo-app-test-connection --ignore-not-found
+kubectl -n lab4-dev apply -f /tmp/demo-app-test-connection.yaml
+kubectl -n lab4-dev wait \
+  --for=jsonpath='{.status.phase}'=Succeeded \
+  pod/demo-app-test-connection \
+  --timeout=60s
+kubectl -n lab4-dev logs pod/demo-app-test-connection
+kubectl -n lab4-dev delete pod demo-app-test-connection
+```
+
+`kubectl apply` chỉ tạo Pod đã render và không thực thi lifecycle của Helm test
+hook. Vì vậy khi kiểm tra chart hoàn chỉnh, em ưu tiên dùng `helm test`.
+
 ## 3. Kết quả
 
 - Chart nằm trong `./demo-app`, env values nằm trong `./values/`.
 - HPA scale replica theo CPU target; VPA recommend resource với `updateMode: Off`.
+- Helm test kết nối được tới ClusterIP Service và kết thúc với trạng thái `Succeeded`.
 
 ## 4. Khó khăn & cách giải quyết
 
