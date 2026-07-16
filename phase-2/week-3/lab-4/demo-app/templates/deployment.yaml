@@ -13,9 +13,17 @@ spec:
       {{- include "demo-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- if or .Values.podAnnotations .Values.config.enabled .Values.secret.enabled }}
       annotations:
+        {{- if .Values.config.enabled }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.secret.enabled }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       labels:
         {{- include "demo-app.labels" . | nindent 8 }}
@@ -44,6 +52,30 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPort }}
               protocol: TCP
+          {{- if or .Values.extraEnv .Values.projectedConfig.enabled }}
+          env:
+            {{- if .Values.projectedConfig.enabled }}
+            - name: APP_CONFIG_DIR
+              value: {{ .Values.projectedConfig.mountPath | quote }}
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- if or .Values.extraEnvFrom .Values.config.enabled .Values.secret.enabled }}
+          envFrom:
+            {{- if .Values.config.enabled }}
+            - configMapRef:
+                name: {{ include "demo-app.configMapName" . }}
+            {{- end }}
+            {{- if .Values.secret.enabled }}
+            - secretRef:
+                name: {{ include "demo-app.secretName" . }}
+            {{- end }}
+            {{- with .Values.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -56,13 +88,36 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
+          {{- if or .Values.volumeMounts (and .Values.projectedConfig.enabled (or .Values.config.enabled .Values.secret.enabled)) }}
           volumeMounts:
+            {{- if and .Values.projectedConfig.enabled (or .Values.config.enabled .Values.secret.enabled) }}
+            - name: {{ include "demo-app.projectedVolumeName" . }}
+              mountPath: {{ .Values.projectedConfig.mountPath | quote }}
+              readOnly: true
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- end }}
-      {{- with .Values.volumes }}
+      {{- if or .Values.volumes (and .Values.projectedConfig.enabled (or .Values.config.enabled .Values.secret.enabled)) }}
       volumes:
+        {{- if and .Values.projectedConfig.enabled (or .Values.config.enabled .Values.secret.enabled) }}
+        - name: {{ include "demo-app.projectedVolumeName" . }}
+          projected:
+            defaultMode: 0440
+            sources:
+              {{- if .Values.config.enabled }}
+              - configMap:
+                  name: {{ include "demo-app.configMapName" . }}
+              {{- end }}
+              {{- if .Values.secret.enabled }}
+              - secret:
+                  name: {{ include "demo-app.secretName" . }}
+              {{- end }}
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

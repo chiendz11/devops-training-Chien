@@ -5,6 +5,24 @@ image:
   tag: "v1.2.0"
   pullPolicy: IfNotPresent
 
+config:
+  enabled: true
+  data:
+    NAME: stg
+    APP_ENV: staging
+    LOG_LEVEL: info
+    FEATURE_GREETING: "true"
+
+secret:
+  enabled: true
+  stringData:
+    API_KEY: stg-demo-api-key
+    DB_PASSWORD: stg-demo-password
+
+projectedConfig:
+  enabled: true
+  mountPath: /etc/demo-app/config
+
 service:
   type: ClusterIP
   port: 80

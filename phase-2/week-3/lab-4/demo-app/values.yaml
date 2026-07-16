@@ -20,6 +20,34 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# Non-sensitive application configuration.
+# These values are rendered into a ConfigMap, injected as env vars,
+# and also mounted as files through a projected volume.
+config:
+  enabled: true
+  data:
+    NAME: demo-app
+    APP_ENV: local
+    LOG_LEVEL: info
+    FEATURE_GREETING: "true"
+
+# Demo-only secret values.
+# In real projects, do not commit real secrets into values.yaml.
+# Prefer External Secrets, Sealed Secrets, SOPS, or CI/CD secret injection.
+secret:
+  enabled: true
+  stringData:
+    API_KEY: local-demo-api-key
+    DB_PASSWORD: local-demo-password
+
+# Mount ConfigMap + Secret into one directory with a projected volume.
+projectedConfig:
+  enabled: true
+  mountPath: /etc/demo-app/config
+
+extraEnv: []
+extraEnvFrom: []
+
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
   # Specifies whether a service account should be created.

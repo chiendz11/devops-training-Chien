@@ -60,3 +60,24 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the ConfigMap name.
+*/}}
+{{- define "demo-app.configMapName" -}}
+{{- printf "%s-config" (include "demo-app.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create the Secret name.
+*/}}
+{{- define "demo-app.secretName" -}}
+{{- printf "%s-secret" (include "demo-app.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create the projected volume name.
+*/}}
+{{- define "demo-app.projectedVolumeName" -}}
+{{- printf "%s-projected-config" (include "demo-app.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
